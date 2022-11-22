@@ -4,6 +4,7 @@ import at.ac.fhcampuswien.jarvis.models.Account;
 import at.ac.fhcampuswien.jarvis.service.AccountService;
 import org.springframework.stereotype.Controller;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 @Controller
@@ -32,10 +33,22 @@ public class RegistrationCli {
         Scanner lastnameScanner = new Scanner(System.in);
         String lastname = lastnameScanner.nextLine();
 
-        System.out.print("Username: ");
+        String username = "";
 
-        Scanner usernameScanner = new Scanner(System.in);
-        String username = usernameScanner.nextLine();
+        while(true) {
+            System.out.print("Username: ");
+
+            Scanner usernameScanner = new Scanner(System.in);
+            username = usernameScanner.nextLine();
+
+            if (!accountService.checkAccountByUsername(username)) {
+                break;
+            } else {
+                System.out.println();
+                System.out.println("This username is already used.");
+                System.out.println();
+            }
+        }
 
         System.out.print("Password: ");
 

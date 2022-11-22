@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountServiceImpl implements AccountService {
 
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
     public AccountServiceImpl(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
@@ -16,5 +16,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account createAccount(Account account) {
         return accountRepository.save(account);
+    }
+
+    @Override
+    public boolean checkAccountByUsername(String username) {
+        return accountRepository.findAccountByUsername(username).isPresent();
     }
 }

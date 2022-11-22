@@ -25,6 +25,8 @@ public class Account {
         this.password = AES256.encrypt(password);
     }
 
+    public Account() { }
+
     public Long getId() {
         return id;
     }

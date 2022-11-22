@@ -4,4 +4,6 @@ import at.ac.fhcampuswien.jarvis.models.Account;
 
 public interface AccountService {
     Account createAccount(Account account);
+
+    boolean checkAccountByUsername(String username);
 }
