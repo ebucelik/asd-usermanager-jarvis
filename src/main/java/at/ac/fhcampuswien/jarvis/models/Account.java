@@ -1,5 +1,7 @@
 package at.ac.fhcampuswien.jarvis.models;
 
+import at.ac.fhcampuswien.jarvis.security.AES256;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,6 +17,15 @@ public class Account {
     private String username;
     @Column
     private String password;
+
+    public Account(String firstname, String lastname, String username, String password) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.username = username;
+        this.password = AES256.encrypt(password);
+    }
+
+    public Account() { }
 
     public Long getId() {
         return id;
@@ -53,6 +64,6 @@ public class Account {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = AES256.encrypt(password);
     }
 }
