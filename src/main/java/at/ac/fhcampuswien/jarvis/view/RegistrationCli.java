@@ -17,43 +17,72 @@ public class RegistrationCli {
     }
 
     public void showCli() {
+        String firstname = "";
+        String lastname = "";
+        String username = "";
+        String password = "";
+
         System.out.println();
 
         System.out.println("REGISTRATION WAS SELECTED");
 
         System.out.println();
 
-        System.out.print("Firstname: ");
-
-        Scanner firstnameScanner = new Scanner(System.in);
-        String firstname = firstnameScanner.nextLine();
-
-        System.out.print("Lastname: ");
-
-        Scanner lastnameScanner = new Scanner(System.in);
-        String lastname = lastnameScanner.nextLine();
-
-        String username = "";
-
         while(true) {
-            System.out.print("Username: ");
+            if (firstname.isEmpty()) {
+                System.out.print("Firstname: ");
 
-            Scanner usernameScanner = new Scanner(System.in);
-            username = usernameScanner.nextLine();
+                Scanner firstnameScanner = new Scanner(System.in);
+                firstname = firstnameScanner.nextLine();
+            }
 
-            if (!accountService.checkAccountByUsername(username)) {
-                break;
-            } else {
+            if (lastname.isEmpty()) {
+                System.out.print("Lastname: ");
+
+                Scanner lastnameScanner = new Scanner(System.in);
+                lastname = lastnameScanner.nextLine();
+            }
+
+            if (username.isEmpty() || accountService.checkAccountByUsername(username)) {
+                username = "";
+
+                System.out.print("Username: ");
+
+                Scanner usernameScanner = new Scanner(System.in);
+                username = usernameScanner.nextLine();
+            }
+
+            if (password.isEmpty()) {
+                System.out.print("Password: ");
+
+                Scanner passwordScanner = new Scanner(System.in);
+                password = passwordScanner.nextLine();
+            }
+
+            if(firstname.isEmpty()) {
+                System.out.println();
+                System.out.println("Firstname is empty.");
+                System.out.println();
+            } else if (lastname.isEmpty()) {
+                System.out.println();
+                System.out.println("Lastname is empty.");
+                System.out.println();
+            } else if (username.isEmpty()) {
+                System.out.println();
+                System.out.println("Username is empty.");
+                System.out.println();
+            } else if (password.isEmpty()) {
+                System.out.println();
+                System.out.println("Password is empty.");
+                System.out.println();
+            } else if (accountService.checkAccountByUsername(username)) {
                 System.out.println();
                 System.out.println("This username is already used.");
                 System.out.println();
+            } else {
+                break;
             }
         }
-
-        System.out.print("Password: ");
-
-        Scanner passwordScanner = new Scanner(System.in);
-        String password = passwordScanner.nextLine();
 
         Account account = accountService.createAccount(
                 new Account(

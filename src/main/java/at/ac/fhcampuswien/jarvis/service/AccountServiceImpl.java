@@ -4,6 +4,8 @@ import at.ac.fhcampuswien.jarvis.models.Account;
 import at.ac.fhcampuswien.jarvis.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -21,5 +23,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean checkAccountByUsername(String username) {
         return accountRepository.findAccountByUsername(username).isPresent();
+    }
+
+    @Override
+    public Optional<Account> findAccountByUsername(String username) {
+        return accountRepository.findAccountByUsername(username);
     }
 }
