@@ -2,6 +2,8 @@ package at.ac.fhcampuswien.jarvis.view;
 
 import at.ac.fhcampuswien.jarvis.service.AccountService;
 import org.springframework.stereotype.Controller;
+
+import java.util.Optional;
 import java.util.Scanner;
 
 @Controller
@@ -9,8 +11,14 @@ public class Cli {
 
     private final AccountService accountService;
 
+    private final RegistrationCli registrationCli;
+    private final LoginCli loginCli;
+
     public Cli(AccountService accountService) {
         this.accountService = accountService;
+
+        this.loginCli = new LoginCli(accountService);
+        this.registrationCli = new RegistrationCli(accountService);
     }
 
     enum Menu {
@@ -47,10 +55,14 @@ public class Cli {
         while(true) {
             System.out.println("a) " + Menu.REGISTRATION);
             System.out.println("b) " + Menu.LOGIN);
-            System.out.println("c) " + Menu.LOGOUT);
-            System.out.println("d) " + Menu.CHANGEPASSWORD);
-            System.out.println("e) " + Menu.DELETEACCOUNT);
-            System.out.println("f) " + Menu.EXIT);
+
+            // .isPresent() does not work somehow
+            if (loginCli.account != null) {
+                System.out.println("c) " + Menu.LOGOUT);
+                System.out.println("d) " + Menu.CHANGEPASSWORD);
+                System.out.println("e) " + Menu.DELETEACCOUNT);
+                System.out.println("f) " + Menu.EXIT);
+            }
 
             System.out.println();
 
@@ -61,26 +73,36 @@ public class Cli {
             Menu selectedMenu = Menu.getMenuBy(scanner.nextLine());
 
             switch (selectedMenu) {
-                case REGISTRATION:
-                    showRegistrationCli();
-                    break;
-                case LOGIN:
-                    break;
-                case LOGOUT:
-                    break;
-                case CHANGEPASSWORD:
-                    break;
-                case DELETEACCOUNT:
-                    break;
-                case EXIT:
+                case REGISTRATION -> showRegistrationCli();
+                case LOGIN -> showLoginCli();
+                case EXIT -> {
                     System.out.println("Exit program...");
                     return;
+                }
+            }
+
+            if (loginCli.account != null) {
+                switch (selectedMenu) {
+                    case LOGOUT:
+                        loginCli.account = null;
+                        break;
+                    case CHANGEPASSWORD:
+                        break;
+                    case DELETEACCOUNT:
+                        break;
+                    case EXIT:
+                        System.out.println("Exit program...");
+                        return;
+                }
             }
         }
     }
 
     private void showRegistrationCli() {
-        RegistrationCli registrationCli = new RegistrationCli(accountService);
         registrationCli.showCli();
+    }
+
+    private void showLoginCli() {
+        loginCli.showCli();
     }
 }
