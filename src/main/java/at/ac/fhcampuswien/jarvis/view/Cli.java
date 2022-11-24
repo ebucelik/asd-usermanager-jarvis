@@ -1,9 +1,9 @@
 package at.ac.fhcampuswien.jarvis.view;
 
+import at.ac.fhcampuswien.jarvis.models.Account;
 import at.ac.fhcampuswien.jarvis.service.AccountService;
 import org.springframework.stereotype.Controller;
 
-import java.util.Optional;
 import java.util.Scanner;
 
 @Controller
@@ -13,12 +13,14 @@ public class Cli {
 
     private final RegistrationCli registrationCli;
     private final LoginCli loginCli;
+    private final ChangePasswordCli changePasswordCli;
 
     public Cli(AccountService accountService) {
         this.accountService = accountService;
-
         this.loginCli = new LoginCli(accountService);
         this.registrationCli = new RegistrationCli(accountService);
+        this.changePasswordCli = new ChangePasswordCli(accountService);
+
     }
 
     enum Menu {
@@ -87,6 +89,7 @@ public class Cli {
                         loginCli.account = null;
                         break;
                     case CHANGEPASSWORD:
+                        showChangePasswordCli(loginCli.account.get());
                         break;
                     case DELETEACCOUNT:
                         break;
@@ -104,5 +107,9 @@ public class Cli {
 
     private void showLoginCli() {
         loginCli.showCli();
+    }
+
+    private void showChangePasswordCli(Account account) {
+        changePasswordCli.showCli(account);
     }
 }
