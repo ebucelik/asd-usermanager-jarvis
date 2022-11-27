@@ -13,14 +13,14 @@ public class Cli {
 
     private final RegistrationCli registrationCli;
     private final LoginCli loginCli;
+    private final ChangePasswordCli changePasswordCli;
     private final DeleteAccountCli deleteAccountCli;
 
     public Cli(AccountService accountService) {
         this.accountService = accountService;
-
         this.loginCli = new LoginCli(accountService);
         this.registrationCli = new RegistrationCli(accountService);
-
+        this.changePasswordCli = new ChangePasswordCli(accountService);
         this.deleteAccountCli = new DeleteAccountCli(accountService);
     }
 
@@ -90,6 +90,7 @@ public class Cli {
                         loginCli.account = null;
                         break;
                     case CHANGEPASSWORD:
+                        showChangePasswordCli(loginCli.account.get());
                         break;
                     case DELETEACCOUNT:
                         Boolean deletedAccount = showDeleteAccountCli(loginCli.account.get());
@@ -112,9 +113,12 @@ public class Cli {
     private void showLoginCli() {
         loginCli.showCli();
     }
-
+    
+    private void showChangePasswordCli(Account account) {
+        changePasswordCli.showCli(account);
+    }
+    
     private Boolean showDeleteAccountCli(Account account) {
         return deleteAccountCli.showCli(account);
     }
-
 }
