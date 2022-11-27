@@ -7,6 +7,8 @@ import java.util.Optional;
 public interface AccountService {
     Account createAccount(Account account);
 
+    void deleteAccount(Account account);
+
     boolean checkAccountByUsername(String username);
 
     Optional<Account> findAccountByUsername(String username);
