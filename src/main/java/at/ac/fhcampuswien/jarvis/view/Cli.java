@@ -93,8 +93,8 @@ public class Cli {
                         showChangePasswordCli(loginCli.account.get());
                         break;
                     case DELETEACCOUNT:
-                        Boolean deletedAccount = showDeleteAccountCli(loginCli.account.get());
-                        if (deletedAccount) {
+                        Boolean isAccountDeleted = showDeleteAccountCli(loginCli.account.get());
+                        if (isAccountDeleted) {
                             loginCli.account = null;
                         }
                         break;

@@ -16,35 +16,29 @@ public class DeleteAccountCli {
         this.accountService = accountService;
     }
 
-    Boolean deletedAccount = false;
-
     public boolean showCli(Account account) {
-        while (true) {
+        System.out.println();
+        System.out.println("DELETE ACCOUNT WAS SELECTED");
+        System.out.println();
+
+        System.out.print("Password: ");
+        Scanner passwordScanner = new Scanner(System.in);
+        String password = passwordScanner.nextLine();
+
+        if (!password.equals(AES256.decrypt(account.getPassword()))) {
             System.out.println();
-            System.out.println("DELETE ACCOUNT WAS SELECTED");
-            System.out.println();
-
-            System.out.print("Password: ");
-            Scanner passwordScanner = new Scanner(System.in);
-            String password = passwordScanner.nextLine();
-
-            if (!password.equals(AES256.decrypt(account.getPassword()))) {
-                System.out.println();
-                System.out.println("Password is incorrect");
-                System.out.println();
-
-                break;
-            }
-
-            accountService.deleteAccount(account);
-            deletedAccount = true;
-
-            System.out.println();
-            System.out.println("Account with username @" + account.getUsername() + " was deleted successfully.");
+            System.out.println("Password is incorrect.");
             System.out.println();
 
-            break;
+            return false;
         }
-        return(deletedAccount);
+
+        accountService.deleteAccount(account);
+
+        System.out.println();
+        System.out.println("Account with username @" + account.getUsername() + " was deleted successfully.");
+        System.out.println();
+
+        return true;
     }
 }
