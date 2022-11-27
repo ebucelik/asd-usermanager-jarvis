@@ -47,12 +47,13 @@ public class ChangePasswordCli {
             break;
         }
 
-
         account.setPassword(newPassword);
         accountService.createAccount(account);
 
         System.out.println();
-        System.out.println("Account with username @" + account.getUsername() + " changed its password successfully.");
+        System.out.println("Account with username @" +
+            account.getUsername() +
+                " changed its password successfully.");
         System.out.println();
 
         break;
