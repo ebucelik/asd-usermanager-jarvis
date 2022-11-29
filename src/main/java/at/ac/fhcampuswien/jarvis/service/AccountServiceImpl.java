@@ -21,6 +21,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public void deleteAccount(Account account) { accountRepository.delete(account); }
+
+    @Override
     public boolean checkAccountByUsername(String username) {
         return accountRepository.findAccountByUsername(username).isPresent();
     }
