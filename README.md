@@ -10,4 +10,5 @@ Ein UserManager geschrieben in Java und bedienbar durch ein CLI Interface.
 
 ## Vorbedingung
 - PostgreSQL Driver und Datenbank ist installiert.
-- PostgreSQL Daemon läuft.
+- PostgreSQL Server läuft.
+- https://www.postgresql.org/download
