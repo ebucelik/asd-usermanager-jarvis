@@ -2,22 +2,19 @@ package at.ac.fhcampuswien.jarvis.view;
 
 import at.ac.fhcampuswien.jarvis.models.Account;
 import at.ac.fhcampuswien.jarvis.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.Scanner;
 
 @Controller
 public class Cli {
-
-    private final AccountService accountService;
-
     private final RegistrationCli registrationCli;
     private final LoginCli loginCli;
     private final ChangePasswordCli changePasswordCli;
     private final DeleteAccountCli deleteAccountCli;
 
     public Cli(AccountService accountService) {
-        this.accountService = accountService;
         this.loginCli = new LoginCli(accountService);
         this.registrationCli = new RegistrationCli(accountService);
         this.changePasswordCli = new ChangePasswordCli(accountService);

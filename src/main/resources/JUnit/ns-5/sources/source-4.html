@@ -1,0 +1,190 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > LoginCli</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">at.ac.fhcampuswien.jarvis.view</a>
+</div>
+
+<h1>Coverage Summary for Class: LoginCli (at.ac.fhcampuswien.jarvis.view)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LoginCli</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71,1%
+  </span>
+  <span class="absValue">
+    (27/38)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package at.ac.fhcampuswien.jarvis.view;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import at.ac.fhcampuswien.jarvis.models.Account;
+<i class="no-highlight">4</i>&nbsp;import at.ac.fhcampuswien.jarvis.security.AES256;
+<i class="no-highlight">5</i>&nbsp;import at.ac.fhcampuswien.jarvis.service.AccountService;
+<i class="no-highlight">6</i>&nbsp;import org.springframework.stereotype.Controller;
+<i class="no-highlight">7</i>&nbsp;
+<i class="no-highlight">8</i>&nbsp;import java.text.SimpleDateFormat;
+<i class="no-highlight">9</i>&nbsp;import java.time.format.DateTimeFormatter;
+<i class="no-highlight">10</i>&nbsp;import java.util.Calendar;
+<i class="no-highlight">11</i>&nbsp;import java.util.Locale;
+<i class="no-highlight">12</i>&nbsp;import java.util.Optional;
+<i class="no-highlight">13</i>&nbsp;import java.util.Scanner;
+<i class="no-highlight">14</i>&nbsp;
+<i class="no-highlight">15</i>&nbsp;@Controller
+<i class="no-highlight">16</i>&nbsp;public class LoginCli {
+<i class="no-highlight">17</i>&nbsp;
+<i class="no-highlight">18</i>&nbsp;    public Optional&lt;Account&gt; account;
+<i class="no-highlight">19</i>&nbsp;    private final AccountService accountService;
+<b class="fc"><i class="no-highlight">20</i>&nbsp;    private Calendar futureCalendar = Calendar.getInstance();</b>
+<b class="fc"><i class="no-highlight">21</i>&nbsp;    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(&quot;dd.MM.yyyy&quot;);</b>
+<b class="fc"><i class="no-highlight">22</i>&nbsp;    private SimpleDateFormat simpleTimeFormat = new SimpleDateFormat(&quot;hh:mm&quot;);</b>
+<b class="fc"><i class="no-highlight">23</i>&nbsp;    int attempt = 0;</b>
+<i class="no-highlight">24</i>&nbsp;
+<b class="fc"><i class="no-highlight">25</i>&nbsp;    LoginCli(AccountService accountService) {</b>
+<b class="fc"><i class="no-highlight">26</i>&nbsp;        this.accountService = accountService;</b>
+<i class="no-highlight">27</i>&nbsp;    }
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;    public void showCli() {
+<b class="fc"><i class="no-highlight">30</i>&nbsp;        System.out.println();</b>
+<i class="no-highlight">31</i>&nbsp;
+<b class="fc"><i class="no-highlight">32</i>&nbsp;        System.out.println(&quot;LOGIN WAS SELECTED&quot;);</b>
+<i class="no-highlight">33</i>&nbsp;
+<b class="fc"><i class="no-highlight">34</i>&nbsp;        System.out.println();</b>
+<i class="no-highlight">35</i>&nbsp;
+<b class="fc"><i class="no-highlight">36</i>&nbsp;        if (attempt &gt;= 4) {</b>
+<b class="nc"><i class="no-highlight">37</i>&nbsp;            if (Calendar.getInstance().getTime().after(futureCalendar.getTime())) {</b>
+<b class="nc"><i class="no-highlight">38</i>&nbsp;                attempt = 0;</b>
+<i class="no-highlight">39</i>&nbsp;            } else {
+<b class="nc"><i class="no-highlight">40</i>&nbsp;                System.out.println(&quot;User is locked until &quot; + simpleDateFormat.format(futureCalendar.getTime()) + &quot; at &quot; + simpleTimeFormat.format(futureCalendar.getTime()));</b>
+<b class="nc"><i class="no-highlight">41</i>&nbsp;                System.out.println();</b>
+<i class="no-highlight">42</i>&nbsp;            }
+<i class="no-highlight">43</i>&nbsp;        }
+<i class="no-highlight">44</i>&nbsp;
+<b class="fc"><i class="no-highlight">45</i>&nbsp;        int maxAttempt = 4;</b>
+<b class="fc"><i class="no-highlight">46</i>&nbsp;        for(; attempt &lt; maxAttempt; attempt++) {</b>
+<b class="fc"><i class="no-highlight">47</i>&nbsp;            System.out.print(&quot;Username: &quot;);</b>
+<i class="no-highlight">48</i>&nbsp;
+<b class="fc"><i class="no-highlight">49</i>&nbsp;            Scanner usernameScanner = new Scanner(System.in);</b>
+<b class="fc"><i class="no-highlight">50</i>&nbsp;            String username = usernameScanner.nextLine();</b>
+<i class="no-highlight">51</i>&nbsp;
+<b class="fc"><i class="no-highlight">52</i>&nbsp;            System.out.print(&quot;Password: &quot;);</b>
+<i class="no-highlight">53</i>&nbsp;
+<b class="fc"><i class="no-highlight">54</i>&nbsp;            Scanner passwordScanner = new Scanner(System.in);</b>
+<b class="fc"><i class="no-highlight">55</i>&nbsp;            String password = passwordScanner.nextLine();</b>
+<i class="no-highlight">56</i>&nbsp;
+<b class="fc"><i class="no-highlight">57</i>&nbsp;            System.out.println();</b>
+<i class="no-highlight">58</i>&nbsp;
+<b class="fc"><i class="no-highlight">59</i>&nbsp;            Optional&lt;Account&gt; optionalAccount = accountService.findAccountByUsername(username);</b>
+<i class="no-highlight">60</i>&nbsp;
+<b class="fc"><i class="no-highlight">61</i>&nbsp;            if (optionalAccount.isEmpty()) {</b>
+<b class="nc"><i class="no-highlight">62</i>&nbsp;                System.out.println(&quot;Username or password is not correct.&quot;);</b>
+<b class="fc"><i class="no-highlight">63</i>&nbsp;            } else if (!AES256.decrypt(optionalAccount.get().getPassword()).equals(password)){</b>
+<b class="nc"><i class="no-highlight">64</i>&nbsp;                System.out.println(&quot;Username or password is not correct.&quot;);</b>
+<i class="no-highlight">65</i>&nbsp;            } else {
+<b class="fc"><i class="no-highlight">66</i>&nbsp;                account = optionalAccount;</b>
+<b class="fc"><i class="no-highlight">67</i>&nbsp;                attempt = 0;</b>
+<i class="no-highlight">68</i>&nbsp;
+<b class="fc"><i class="no-highlight">69</i>&nbsp;                System.out.println(&quot;Login with username @&quot; + account.get().getUsername() + &quot; was successful.&quot;);</b>
+<i class="no-highlight">70</i>&nbsp;
+<b class="fc"><i class="no-highlight">71</i>&nbsp;                System.out.println();</b>
+<b class="fc"><i class="no-highlight">72</i>&nbsp;                break;</b>
+<i class="no-highlight">73</i>&nbsp;            }
+<i class="no-highlight">74</i>&nbsp;
+<b class="nc"><i class="no-highlight">75</i>&nbsp;            System.out.println((maxAttempt - (attempt + 1)) + &quot; attempts left.&quot;);</b>
+<i class="no-highlight">76</i>&nbsp;
+<b class="nc"><i class="no-highlight">77</i>&nbsp;            System.out.println();</b>
+<i class="no-highlight">78</i>&nbsp;
+<b class="nc"><i class="no-highlight">79</i>&nbsp;            if ((maxAttempt - (attempt + 1)) == 0) {</b>
+<b class="nc"><i class="no-highlight">80</i>&nbsp;                futureCalendar = Calendar.getInstance();</b>
+<b class="nc"><i class="no-highlight">81</i>&nbsp;                futureCalendar.add(Calendar.SECOND, 60);</b>
+<i class="no-highlight">82</i>&nbsp;            }
+<i class="no-highlight">83</i>&nbsp;        }
+<i class="no-highlight">84</i>&nbsp;    }
+<i class="no-highlight">85</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-12-06 00:19</div>
+</div>
+</body>
+</html>

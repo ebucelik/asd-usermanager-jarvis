@@ -2,6 +2,7 @@ package at.ac.fhcampuswien.jarvis.service;
 
 import at.ac.fhcampuswien.jarvis.models.Account;
 import at.ac.fhcampuswien.jarvis.repository.AccountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -9,11 +10,8 @@ import java.util.Optional;
 @Service
 public class AccountServiceImpl implements AccountService {
 
-    private final AccountRepository accountRepository;
-
-    public AccountServiceImpl(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Override
     public Account createAccount(Account account) {
