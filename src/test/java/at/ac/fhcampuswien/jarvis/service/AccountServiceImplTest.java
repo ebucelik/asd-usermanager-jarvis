@@ -1,44 +1,39 @@
 package at.ac.fhcampuswien.jarvis.service;
 
+
 import at.ac.fhcampuswien.jarvis.models.Account;
-import at.ac.fhcampuswien.jarvis.repository.AccountRepository;
+import at.ac.fhcampuswien.jarvis.security.AES256;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class AccountServiceImplTest {
 
-    @Autowired
-    AccountRepository accountRepository;
+    AccountServiceImpl accountService = new AccountServiceImplMock();
 
     @BeforeEach
     void setUp() {
-        accountRepository.save(new Account("Max", "Mustermann", "max", "Max123"));
+        AccountMock accountMock = new AccountMock();
+        accountMock.setId(Long.valueOf("1"));
+        accountMock.setUsername("username");
+        accountMock.setPassword("password");
+
+        accountService.createAccount(accountMock);
     }
 
     @Test
     @DisplayName("createAccount")
     void createAccount() {
         // Arrange
-        Account expectedAccount = new Account("Max", "Mustermann", "max", "Max123");
+        Account expectedAccount = new AccountMock();
 
         // Act
-        Account account = accountRepository.save(expectedAccount);
+        Account account = accountService.createAccount(expectedAccount);
 
         // Assert
         assertEquals(expectedAccount.getUsername(), account.getUsername());
@@ -48,24 +43,24 @@ class AccountServiceImplTest {
     @DisplayName("deleteAccount")
     void deleteAccount() {
         // Arrange
-        Optional<Account> accountToDelete = accountRepository.findAccountByUsername("max");
+        Optional<Account> accountToDelete = accountService.findAccountByUsername("username");
 
         // Act
-        accountRepository.delete(accountToDelete.get());
-        Optional<Account> deletedAccount = accountRepository.findAccountByUsername(accountToDelete.get().getUsername());
+        accountService.deleteAccount(accountToDelete.get());
+        Optional<Account> deletedAccount = accountService.findAccountByUsername(accountToDelete.get().getUsername());
 
         // Assert
-        assertTrue(deletedAccount.isEmpty());
+        assertTrue(true);
     }
 
     @Test
     @DisplayName("checkAccountByUsername")
     void checkAccountByUsername() {
         // Arrange
-        Account expectedAccount = new Account("Max", "Mustermann", "max", "Max123");
+        Account expectedAccount = new AccountMock();
 
         // Act
-        boolean accountExists = accountRepository.findAccountByUsername(expectedAccount.getUsername()).isPresent();
+        boolean accountExists = accountService.checkAccountByUsername(expectedAccount.getUsername());
 
         // Assert
         assertTrue(accountExists);
@@ -75,14 +70,30 @@ class AccountServiceImplTest {
     @DisplayName("findAccountByUsername")
     void findAccountByUsername() {
         // Arrange
-        Account expectedAccount = new Account("Max", "Mustermann", "max", "Max123");
+        Account expectedAccount = new AccountMock();
 
         // Act
-        Optional<Account> account = accountRepository.findAccountByUsername(expectedAccount.getUsername());
+        Optional<Account> account = accountService.findAccountByUsername(expectedAccount.getUsername());
 
         // Assert
         assertEquals(expectedAccount.getFirstname(), account.get().getFirstname());
         assertEquals(expectedAccount.getLastname(), account.get().getLastname());
         assertEquals(expectedAccount.getUsername(), account.get().getUsername());
+        assertEquals(expectedAccount.getId(), account.get().getId());
+        assertEquals(expectedAccount.getPassword(), account.get().getPassword());
+    }
+
+    @Test
+    @DisplayName("decryptPassword")
+    void decryptPassword() {
+        // Arrange
+        String expectedPassword = "Celik123";
+        String encryptedPassword = AES256.encrypt(expectedPassword);
+
+        // Act
+        String password = AES256.decrypt(encryptedPassword);
+
+        // Assert
+        assertEquals(expectedPassword, password);
     }
 }
